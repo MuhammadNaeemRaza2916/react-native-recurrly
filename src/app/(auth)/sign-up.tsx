@@ -6,6 +6,12 @@ const SignUp = () => {
     <View>
       <Text>SignUp</Text>
       <Link href={"/(auth)/sign-in"}>Sign In</Link>
+      <Link
+        className="mt-4 font-sans-extrabold rounded bg-primary text-white p-4"
+        href={"/onboarding"}
+      >
+        Go to onboarding
+      </Link>
     </View>
   );
 };
