@@ -11,6 +11,7 @@ import images from "@/constants/images";
 import "@/global.css";
 import { formatCurrency } from "@/lib/utils";
 import { useUser } from "@clerk/expo";
+import { posthog, posthogLogger } from "@/src/config/posthog";
 import dayjs from "dayjs";
 import { styled } from "nativewind";
 import { useState } from "react";
@@ -29,10 +30,13 @@ export default function App() {
     setExpandedSubscriptionId((currentId) =>
       currentId === item.id ? null : item.id,
     );
-    // posthog.capture(isExpanding ? 'subscription_expanded' : 'subscription_collapsed', {
-    //     subscription_name: item.name,
-    //     subscription_id: item.id,
-    // });
+    posthog?.capture(
+      isExpanding ? "subscription_expanded" : "subscription_collapsed",
+      { subscription_id: item.id },
+    );
+    posthogLogger.info(
+      isExpanding ? "subscription_card_expanded" : "subscription_card_collapsed",
+    );
   };
 
   // Get user display name: firstName, fullName, or email
