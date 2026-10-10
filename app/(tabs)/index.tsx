@@ -1,19 +1,17 @@
+import CreateSubscriptionModal from "@/components/CreateSubscriptionModal";
 import ListHeading from "@/components/ListHeading";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
-import {
-  HOME_BALANCE,
-  HOME_SUBSCRIPTIONS,
-  UPCOMING_SUBSCRIPTIONS,
-} from "@/constants/data";
+import { HOME_BALANCE, UPCOMING_SUBSCRIPTIONS } from "@/constants/data";
 import { icons } from "@/constants/icons";
 import images from "@/constants/images";
 import "@/global.css";
+import { useSubscriptionStore } from "@/lib/subscriptionStore";
 import { formatCurrency } from "@/lib/utils";
 import { useUser } from "@clerk/expo";
-import { posthog, posthogLogger } from "@/src/config/posthog";
 import dayjs from "dayjs";
 import { styled } from "nativewind";
+import { usePostHog } from "posthog-react-native";
 import { useState } from "react";
 import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
@@ -21,22 +19,35 @@ const SafeAreaView = styled(RNSafeAreaView);
 
 export default function App() {
   const { user } = useUser();
+  const posthog = usePostHog();
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<
     string | null
   >(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { subscriptions, addSubscription } = useSubscriptionStore();
 
   const handleSubscriptionPress = (item: Subscription) => {
     const isExpanding = expandedSubscriptionId !== item.id;
     setExpandedSubscriptionId((currentId) =>
       currentId === item.id ? null : item.id,
     );
-    posthog?.capture(
+    posthog.capture(
       isExpanding ? "subscription_expanded" : "subscription_collapsed",
-      { subscription_id: item.id },
+      {
+        subscription_name: item.name,
+        subscription_id: item.id,
+      },
     );
-    posthogLogger.info(
-      isExpanding ? "subscription_card_expanded" : "subscription_card_collapsed",
-    );
+  };
+
+  const handleCreateSubscription = (newSubscription: Subscription) => {
+    addSubscription(newSubscription);
+    posthog.capture("subscription_created", {
+      subscription_name: newSubscription.name,
+      subscription_price: newSubscription.price,
+      subscription_frequency: newSubscription.frequency,
+      subscription_category: newSubscription.category,
+    });
   };
 
   // Get user display name: firstName, fullName, or email
@@ -62,8 +73,7 @@ export default function App() {
                 <Text className="home-user-name">{displayName}</Text>
               </View>
 
-              {/* <Pressable onPress={() => setIsModalVisible(true)}> */}
-              <Pressable>
+              <Pressable onPress={() => setIsModalVisible(true)}>
                 <Image source={icons.add} className="home-add-icon" />
               </Pressable>
             </View>
@@ -103,7 +113,7 @@ export default function App() {
             <ListHeading title="All Subscriptions" />
           </>
         )}
-        data={HOME_SUBSCRIPTIONS}
+        data={subscriptions}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <SubscriptionCard
@@ -121,11 +131,11 @@ export default function App() {
         contentContainerClassName="pb-30"
       />
 
-      {/* <CreateSubscriptionModal
+      <CreateSubscriptionModal
         visible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
         onSubmit={handleCreateSubscription}
-      /> */}
+      />
     </SafeAreaView>
   );
 }
