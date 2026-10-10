@@ -4,12 +4,12 @@ import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
 import {
   HOME_BALANCE,
   HOME_SUBSCRIPTIONS,
-  UPCOMING_SUBSCRIPTIONS
+  UPCOMING_SUBSCRIPTIONS,
 } from "@/constants/data";
 import { icons } from "@/constants/icons";
 import images from "@/constants/images";
+import "@/global.css";
 import { formatCurrency } from "@/lib/utils";
-import "@/src/global.css";
 import { useUser } from "@clerk/expo";
 import dayjs from "dayjs";
 import { styled } from "nativewind";
