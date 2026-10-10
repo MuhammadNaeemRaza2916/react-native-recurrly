@@ -1,3 +1,4 @@
+import { posthog } from "@/src/config/posthog";
 import { useSignIn } from "@clerk/expo";
 import { Link, useRouter, type Href } from "expo-router";
 import { styled } from "nativewind";
@@ -110,11 +111,11 @@ const SignIn = () => {
           }
 
           // Track successful sign-in after verification
-          // posthog.identify(emailAddress, {
-          //     $set: { email: emailAddress },
-          //     $set_once: { first_sign_in_date: new Date().toISOString() },
-          // });
-          // posthog.capture('user_signed_in', { email: emailAddress });
+          posthog?.identify(emailAddress, {
+            $set: { email: emailAddress },
+            $set_once: { first_sign_in_date: new Date().toISOString() },
+          });
+          posthog?.capture("user_signed_in", { email: emailAddress });
 
           const url = decorateUrl("/(tabs)");
           if (url.startsWith("http")) {
