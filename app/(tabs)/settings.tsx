@@ -1,24 +1,25 @@
 import images from "@/constants/images";
-import { posthog, posthogLogger } from "@/src/config/posthog";
 import { useClerk, useUser } from "@clerk/expo";
 import { styled } from "nativewind";
+import { usePostHog } from "posthog-react-native";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
-
 const SafeAreaView = styled(RNSafeAreaView);
 
 const Settings = () => {
   const { signOut } = useClerk();
   const { user } = useUser();
+  const posthog = usePostHog();
 
   const handleSignOut = async () => {
+    posthog.capture("user_signed_out");
     try {
       await signOut();
-      posthogLogger.info("user_sign_out_completed");
-      posthog?.capture("user_signed_out");
-      posthog?.reset();
+      // Only reset analytics after successful sign-out
+      posthog.reset();
     } catch (error) {
       console.error("Sign-out failed:", error);
+      // Don't reset analytics if sign-out failed
     }
   };
 
