@@ -148,7 +148,7 @@ const CreateSubscriptionModal = ({
               <View className="auth-field">
                 <Text className="auth-label">Name</Text>
                 <TextInput
-                  className="auth-input"
+                  className="auth-input input-field-spacing"
                   placeholder="Subscription name"
                   placeholderTextColor="rgba(0, 0, 0, 0.4)"
                   value={name}
@@ -159,7 +159,7 @@ const CreateSubscriptionModal = ({
               <View className="auth-field">
                 <Text className="auth-label">Price</Text>
                 <TextInput
-                  className="auth-input"
+                  className="auth-input input-field-spacing"
                   placeholder="0.00"
                   placeholderTextColor="rgba(0, 0, 0, 0.4)"
                   value={price}

@@ -8,6 +8,7 @@ import {
   useGlobalSearchParams,
   usePathname,
 } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { PostHogProvider } from "posthog-react-native";
 import { useEffect, useRef } from "react";
 import { posthog } from "../src/config/posthog";
@@ -67,7 +68,12 @@ function RootLayoutContent() {
   // Don't render app until both are ready
   if (!fontsLoaded || !authLoaded) return null;
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <>
+      <StatusBar style="dark" />
+      <Stack screenOptions={{ headerShown: false }} />
+    </>
+  );
 }
 
 export default function RootLayout() {
@@ -81,6 +87,7 @@ export default function RootLayout() {
       }}
     >
       <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+        <StatusBar style="dark" />
         <RootLayoutContent />
       </ClerkProvider>
     </PostHogProvider>

@@ -144,7 +144,7 @@ const SignUp = () => {
                   <View className="auth-field">
                     <Text className="auth-label">Verification Code</Text>
                     <TextInput
-                      className="auth-input"
+                      className="auth-input input-field-spacing"
                       value={code}
                       placeholder="Enter 6-digit code"
                       placeholderTextColor="rgba(0, 0, 0, 0.4)"
@@ -226,7 +226,7 @@ const SignUp = () => {
                 <View className="auth-field">
                   <Text className="auth-label">Email Address</Text>
                   <TextInput
-                    className={`auth-input ${emailTouched && !emailValid && "auth-input-error"}`}
+                    className={`auth-input input-field-spacing ${emailTouched && !emailValid && "auth-input-error"}`}
                     autoCapitalize="none"
                     value={emailAddress}
                     placeholder="name@example.com"
@@ -251,7 +251,7 @@ const SignUp = () => {
                 <View className="auth-field">
                   <Text className="auth-label">Password</Text>
                   <TextInput
-                    className={`auth-input ${passwordTouched && !passwordValid && "auth-input-error"}`}
+                    className={`auth-input input-field-spacing ${passwordTouched && !passwordValid && "auth-input-error"}`}
                     value={password}
                     placeholder="Create a strong password"
                     placeholderTextColor="rgba(0, 0, 0, 0.4)"

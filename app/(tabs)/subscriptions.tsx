@@ -27,12 +27,12 @@ const Subscriptions = () => {
         data={filteredSubscriptions}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
-          <View className="px-5 pt-5">
+          <View className="pt-5">
             <Text className="text-3xl font-bold text-dark mb-5">
               Subscriptions
             </Text>
             <TextInput
-              className="bg-card rounded-xl px-4 py-3 text-dark mb-4"
+              className="bg-card rounded-xl input-field-spacing text-dark mb-4 border border-black/20"
               placeholder="Search subscriptions..."
               placeholderTextColor="#666"
               value={searchQuery}
@@ -51,12 +51,13 @@ const Subscriptions = () => {
         )}
         contentContainerStyle={{
           paddingHorizontal: 20,
-          paddingBottom: 20,
+          paddingBottom: 120,
           gap: 12,
         }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
+        contentContainerClassName="pb-30"
       />
     </SafeAreaView>
   );

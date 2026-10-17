@@ -9,6 +9,7 @@ import "@/global.css";
 import { useSubscriptionStore } from "@/lib/subscriptionStore";
 import { formatCurrency } from "@/lib/utils";
 import { useUser } from "@clerk/expo";
+import { Ionicons } from "@expo/vector-icons";
 import dayjs from "dayjs";
 import { styled } from "nativewind";
 import { usePostHog } from "posthog-react-native";
@@ -84,10 +85,19 @@ export default function App() {
                   }
                   className="home-avatar"
                 />
-                <Text className="home-user-name">{displayName}</Text>
+                <Text
+                  className={`home-user-name ${user?.emailAddresses[0]?.emailAddress && "home-user-email"}`}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {displayName}
+                </Text>
               </View>
 
-              <Pressable onPress={() => setIsModalVisible(true)}>
+              <Pressable
+                onPress={() => setIsModalVisible(true)}
+                className="rounded-full border border-black/20 p-2"
+              >
                 <Image source={icons.add} className="home-add-icon" />
               </Pressable>
             </View>
@@ -116,10 +126,26 @@ export default function App() {
                 keyExtractor={(item) => item.id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
+                // lets the empty state fill the full width of the horizontal list
+                contentContainerClassName={
+                  upcomingSubscriptions.length === 0 ? "grow" : undefined
+                }
                 ListEmptyComponent={
-                  <Text className="home-empty-state">
-                    No upcoming renewals yet.
-                  </Text>
+                  <View className="home-empty-state">
+                    <View className="home-empty-icon">
+                      <Ionicons
+                        name="calendar-outline"
+                        size={28}
+                        color="#ea7a53"
+                      />
+                    </View>
+                    <Text className="home-empty-title">
+                      No upcoming renewals
+                    </Text>
+                    <Text className="home-empty-text">
+                      Your next subscription payments will show up here.
+                    </Text>
+                  </View>
                 }
               />
             </View>
